@@ -1,0 +1,27 @@
+.sidebar-header {
+    color: white;
+    background-image: linear-gradient(to right, rgb(142, 113, 247) , rgb(97,80,245));
+    height: 8vh;
+}
+.sidebar-header p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+}
+.collection-header {
+    background-color: rgb(39, 39, 39);
+    color: white;
+    height: 12vh;
+}
+.collection-list{
+    background-color: rgb(39, 39, 39);
+    height: 80vh;
+    
+}
+.collection-types{
+    padding-top: 20px;
+}
+
+.logo-text{
+    background-color: black;
+    color: white;
+}

@@ -30,7 +30,11 @@ const LoginForm = () => {
           },
         },
       );
+
       localStorage.setItem('jwt_token', response.data.token);
+      if(response){
+        navigate('/');
+      }
       
     } catch (e) {
       const errorStatus = e.response?.status;
@@ -50,8 +54,8 @@ const LoginForm = () => {
       </div>
       <div className='right-side'>
         <div >
-          <div className='signupform'>
-            <p>Log In</p>
+        <p className='heading'>Login to your CMS+ account</p>
+          <div className='login-form'>
             <div>
               <div>
                 <p>Email</p>

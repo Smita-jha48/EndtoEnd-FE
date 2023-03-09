@@ -51,8 +51,8 @@ const SignUpForm = () => {
       </div>
       <div className='right-side'>
         <div >
-          <div className='signupform'>
-            <p>Sign Up</p>
+        <p className='heading'>Sign Up to your CMS+ account</p>
+          <div className='signup-form'>
             <div>
               <div>
                 <p>Email</p>
