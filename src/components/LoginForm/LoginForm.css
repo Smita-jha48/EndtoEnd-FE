@@ -1,0 +1,30 @@
+.row{
+    display: flex;
+}
+
+.left-side{
+    width: 60%;
+    height: 100vh;
+    background-image: url('../../assets//undraw-upload-re-pasx_2023-03-09/undraw-upload-re-pasx.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #f5f5f5;
+}
+.right-side{
+    width: 40%;
+    height: 100vh;
+    color: white;
+    background-color: black;
+}
+.text {
+        position: absolute;
+        top: px;
+        left: 16px;
+}
+
+@media screen and ( min-width:768px ) {
+    .left-side, .right-side {
+       height: 100vh;
+    }
+    
+}
