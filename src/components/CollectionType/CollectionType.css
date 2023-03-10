@@ -4,6 +4,8 @@
     height: 8vh;
 }
 .sidebar-header p {
+    margin-left: 30px;
+    padding-top: 10px;
     font-family: 'Poppins', sans-serif;
     font-size: 30px;
 }
@@ -15,7 +17,7 @@
     height: 12vh;
 }
 .search-icon {
-    margin-top: 20px;
+    margin-top: 17px;
 }
 .collection-list{
     margin-top: -20px;
@@ -28,6 +30,10 @@
 }
 
 .logo-text{
+   padding-left: 5px;
     background-color: black;
+    color: white;
+}
+.collection-name {
     color: white;
 }

@@ -3,7 +3,7 @@ import {PopUpCard} from '../../components';
 import { useNavigate } from 'react-router-dom';
 import  makeRequestbackend  from '../../utils/makeRequestbackend';
 import { GET_COLLECTION,ADD_FIELD,GET_ALL_CONTENT, DELETE_FIELD, EDIT_FIELD} from '../../constants/apiBackEndPoints';
-import EditIcon from '../../assets/user-pencil-write-ui-education_2023-03-09/user-pencil-write-ui-education.png';
+import EditIcon from '../../assets/user-pencil-write-ui-education_2023-03-09/user-pencil-write-ui-education@2x.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -107,11 +107,15 @@ const ContentBuilder = () => {
 
   const handleFields = async(id) => {
     makeRequestbackend(GET_ALL_CONTENT,{},navigate)
-      .then(async (response) => {
+      .then((response) => {
+
         const contents = response.data.find((item) => item.id === id);
         setContent(contents);
         setcollectionName(contents.name);
-        setFieldList(Object.keys(contents.fields));
+        if(contents.fields !== null)
+          setFieldList(Object.keys(contents.fields));
+        else
+          setFieldList([]);
       })
       .catch((e) => {
         if (navigate) {
@@ -188,8 +192,9 @@ const ContentBuilder = () => {
         </div>
         <div className='fields'>
           {collectionName !== '' && (<>
-            <div>{collectionName}
-              <img src={EditIcon}></img>
+            <div className='sub-header'>
+              <div className='sub-header-name'>{collectionName}</div>
+              <div className='sub-header-img'><img src={EditIcon}></img></div>
             </div>
             <button className='new-field-button' onClick={handleSubmit}>Add another field</button> 
             {toggle ?<div><input placeholder='Field Name' value={fieldName} onChange={(e) => setFieldName(e.target.value)}></input><button onClick={SubmitField} >Add Field</button></div>: (<></>)}
@@ -200,6 +205,7 @@ const ContentBuilder = () => {
                 return (
                   <div className='fields-collection' key={index}>
                     <div>{field}</div>
+                    <div>Text</div>
                     <div className='icons'>
                       <div>
                         <FontAwesomeIcon onClick={()=>handleEdit(field)} icon={faEdit} />
