@@ -8,13 +8,19 @@
     font-size: 30px;
 }
 .collection-header {
+    display: flex;
+    justify-content: space-between;
     background-color: rgb(39, 39, 39);
     color: white;
     height: 12vh;
 }
+.search-icon {
+    margin-top: 20px;
+}
 .collection-list{
+    margin-top: -20px;
     background-color: rgb(39, 39, 39);
-    height: 80vh;
+    height: 82vh;
     
 }
 .collection-types{

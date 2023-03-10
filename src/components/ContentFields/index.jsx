@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ContentFields = () => {
+const ContentFields = ({fieldName}) => {
   return (
-    <h4>hii</h4>
+    <h4>{fieldName}</h4>
   );
 
 };

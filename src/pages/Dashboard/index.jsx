@@ -3,6 +3,7 @@ import {CollectionType, ContentBuilder} from '../../components';
 import './Dashboard.css';
 
 const Dashboard = () => {
+  
   return (
     <div className='dashboard'>
       <div className='collection-container'><CollectionType /></div>
