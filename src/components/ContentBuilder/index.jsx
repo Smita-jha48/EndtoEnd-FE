@@ -13,19 +13,17 @@ import './ContentBuilder.css';
 const ContentBuilder = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
-  const [show, setShow] = useState(false);
+  const [editId, setEditId] = useState(0);
   const [fieldName, setFieldName] = useState('');
   const [fieldList, setFieldList] = useState([]);
   const [content, setContent] = useState({});
   const [collectionName, setcollectionName] = useState('');
+  const [oldfield,setOldField] = useState('');
   const handleClick = () => {
     setIsOpen(true);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newList = [ ...fieldList, fieldName ];
-    setFieldList(newList);
-    setFieldName('');
     setToggle(!toggle);
   };
   const navigate = useNavigate();
@@ -48,31 +46,63 @@ const ContentBuilder = () => {
   }, []);
 
   const SubmitField = () => {
-    makeRequestbackend(ADD_FIELD,
-      {
-        data: {
-          id: content.id,
-          field: fieldName,
-          type: 'string'
-        }
-      }, 
-      navigate)
-      .then(async (response) => {
-        const newList = [ ...fieldList, fieldName ];
-        setFieldName('');
-        setFieldList(newList);
-        setToggle(false);
-      })
-      .catch((e) => {
-        if (navigate) {
-          const errorStatus = e.response?.status;
-          if (errorStatus) {
-            navigate(`error/${errorStatus}`);
-          } else {
-            navigate('error');
+    if(editId===0){
+      makeRequestbackend(ADD_FIELD,
+        {
+          data: {
+            id: content.id,
+            field: fieldName,
+            type: 'string'
           }
-        }
-      });
+        }, 
+        navigate)
+        .then(async () => {
+          const newList = [ ...fieldList, fieldName ];
+          setFieldName('');
+          setFieldList(newList);
+          setToggle(false);
+        })
+        .catch((e) => {
+          if (navigate) {
+            const errorStatus = e.response?.status;
+            if (errorStatus) {
+              navigate(`error/${errorStatus}`);
+            } else {
+              navigate('error');
+            }
+          }
+        });
+    }
+    else {
+      makeRequestbackend(EDIT_FIELD,
+        {
+          data: {
+            id: content.id,
+            oldfield:oldfield,
+            newfield:fieldName
+          }
+        },
+        navigate)
+        .then(async () => {
+          let newList = [ ...fieldList, fieldName ];
+          newList = newList.filter((item) => item !== oldfield);
+          setFieldName('');
+          setFieldList(newList);
+          setToggle(false);
+        })
+        .catch((e) => {
+          if (navigate) {
+            const errorStatus = e.response?.status;
+            if (errorStatus) {
+              navigate(`error/${errorStatus}`);
+            } else {
+              navigate('error');
+            }
+          }
+        });
+    }
+
+    
   };
 
   const handleFields = async(id) => {
@@ -103,7 +133,7 @@ const ContentBuilder = () => {
         }
       }, 
       navigate)
-      .then(async (response) => {
+      .then(async () => {
         const newList = fieldList.filter((item) => item !== field);
         setFieldList(newList);
         setFieldName('');
@@ -120,34 +150,16 @@ const ContentBuilder = () => {
         }
       });
   };
-
   const handleEdit = (field) => {
-    makeRequestbackend(EDIT_FIELD,
-      {
-        data: {
-          id: content.id,
-          oldfield: field,
-          newfield: fieldName
-        }
-      }, 
-      navigate)
-      .then(async (response) => {
-        const newList = fieldList.filter((item) => item !== field);
-        setFieldList(newList);
-        setFieldName('');
-        setToggle(false);
-      })
-      .catch((e) => {
-        if (navigate) {
-          const errorStatus = e.response?.status;
-          if (errorStatus) {
-            navigate(`error/${errorStatus}`);
-          } else {
-            navigate('error');
-          }
-        }
-      });
-  }
+    
+    const editTask = fieldList.find((item) => item === field);
+    setOldField(editTask);
+    setFieldName(editTask);
+    setToggle(true);
+    setEditId(1);
+
+  };
+
   
   
   return (

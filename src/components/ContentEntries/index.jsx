@@ -1,7 +1,5 @@
-import React, {useEffect, useState}from 'react';
-import { FaRegEdit } from 'react-icons/fa';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { MdContentCopy } from 'react-icons/md';
+import React, { useState}from 'react';
+import PropTypes from 'prop-types';
 import  {SideModal} from '../../components';
 import './ContentEntries.css';
 
@@ -44,3 +42,9 @@ const ContentEntries = ({name,fields,entrylist}) => {
 };
 
 export default ContentEntries;
+
+ContentEntries.propTypes = {
+  name: PropTypes.string,
+  fields: PropTypes.array,
+  entrylist: PropTypes.array
+};

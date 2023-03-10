@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import  makeRequestbackend  from '../../utils/makeRequestbackend';
 import { CREATE_CONTENT} from '../../constants/apiBackEndPoints';
 import './PopUpCard.css';
@@ -74,4 +75,9 @@ const PopUpCard = ({ setIsOpen, setContent, setcollectionName}) => {
   );
 };
 
+PopUpCard.propTypes = {
+  setIsOpen: PropTypes.func.isRequired,
+  setContent: PropTypes.func.isRequired,
+  setcollectionName: PropTypes.func.isRequired,
+};
 export default PopUpCard;

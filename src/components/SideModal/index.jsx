@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './SideModal.css';
 import PropTypes from 'prop-types';
 
 export default function SideModal({ name, fields, setIsOpen }) {
-  const [newEntry, setNewEntry] = useState({});
   return (
     <>
       <div className="dark-bg" onClick={() => setIsOpen(false)} />
@@ -16,7 +15,7 @@ export default function SideModal({ name, fields, setIsOpen }) {
             return (
               <>
                 <div className="modal-content">{field}</div>
-                <input type="text" className="modal-input" value={field}  />
+                <input type="text" className="modal-input"  />
               </>
             );
           })
@@ -36,4 +35,6 @@ export default function SideModal({ name, fields, setIsOpen }) {
 
 SideModal.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  fields: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
