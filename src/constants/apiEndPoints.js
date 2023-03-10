@@ -10,7 +10,4 @@ export const LOGIN_USER =  {
   method: 'POST',
 };
 
-export const UPDATE_EVENT_DATA = (songId) => ({
-  url: `api/events/${songId}`,
-  method: 'patch',
-});
+

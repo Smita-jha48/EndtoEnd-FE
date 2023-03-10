@@ -1,18 +1,23 @@
 import React,{useState,useEffect} from 'react';
-import {ContentFields, PopUpCard} from '../../components';
+import {PopUpCard} from '../../components';
 import { useNavigate } from 'react-router-dom';
 import  makeRequestbackend  from '../../utils/makeRequestbackend';
-import { GET_COLLECTION } from '../../constants/apiBackEndPoints';
+import { GET_COLLECTION,ADD_FIELD,GET_ALL_CONTENT, DELETE_FIELD, EDIT_FIELD} from '../../constants/apiBackEndPoints';
 import EditIcon from '../../assets/user-pencil-write-ui-education_2023-03-09/user-pencil-write-ui-education.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+
 import './ContentBuilder.css';
 
 const ContentBuilder = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [show, setShow] = useState(false);
   const [fieldName, setFieldName] = useState('');
   const [fieldList, setFieldList] = useState([]);
+  const [content, setContent] = useState({});
   const [collectionName, setcollectionName] = useState('');
-  console.log(fieldList);
   const handleClick = () => {
     setIsOpen(true);
   };
@@ -41,6 +46,109 @@ const ContentBuilder = () => {
         }
       });
   }, []);
+
+  const SubmitField = () => {
+    makeRequestbackend(ADD_FIELD,
+      {
+        data: {
+          id: content.id,
+          field: fieldName,
+          type: 'string'
+        }
+      }, 
+      navigate)
+      .then(async (response) => {
+        const newList = [ ...fieldList, fieldName ];
+        setFieldName('');
+        setFieldList(newList);
+        setToggle(false);
+      })
+      .catch((e) => {
+        if (navigate) {
+          const errorStatus = e.response?.status;
+          if (errorStatus) {
+            navigate(`error/${errorStatus}`);
+          } else {
+            navigate('error');
+          }
+        }
+      });
+  };
+
+  const handleFields = async(id) => {
+    makeRequestbackend(GET_ALL_CONTENT,{},navigate)
+      .then(async (response) => {
+        const contents = response.data.find((item) => item.id === id);
+        setContent(contents);
+        setcollectionName(contents.name);
+        setFieldList(Object.keys(contents.fields));
+      })
+      .catch((e) => {
+        if (navigate) {
+          const errorStatus = e.response?.status;
+          if (errorStatus) {
+            navigate(`error/${errorStatus}`);
+          } else {
+            navigate('error');
+          }
+        }
+      });
+  };
+  const handleDelete = (field) => {
+    makeRequestbackend(DELETE_FIELD,
+      {
+        data: {
+          id: content.id,
+          field: field
+        }
+      }, 
+      navigate)
+      .then(async (response) => {
+        const newList = fieldList.filter((item) => item !== field);
+        setFieldList(newList);
+        setFieldName('');
+        setToggle(false);
+      })
+      .catch((e) => {
+        if (navigate) {
+          const errorStatus = e.response?.status;
+          if (errorStatus) {
+            navigate(`error/${errorStatus}`);
+          } else {
+            navigate('error');
+          }
+        }
+      });
+  };
+
+  const handleEdit = (field) => {
+    makeRequestbackend(EDIT_FIELD,
+      {
+        data: {
+          id: content.id,
+          oldfield: field,
+          newfield: fieldName
+        }
+      }, 
+      navigate)
+      .then(async (response) => {
+        const newList = fieldList.filter((item) => item !== field);
+        setFieldList(newList);
+        setFieldName('');
+        setToggle(false);
+      })
+      .catch((e) => {
+        if (navigate) {
+          const errorStatus = e.response?.status;
+          if (errorStatus) {
+            navigate(`error/${errorStatus}`);
+          } else {
+            navigate('error');
+          }
+        }
+      });
+  }
+  
   
   return (
     <div className='content-builder'>
@@ -52,13 +160,13 @@ const ContentBuilder = () => {
           <button className='new-type-button' onClick={handleClick}>+ New Type</button>
           {isOpen && (
             <PopUpCard
-              setIsOpen={setIsOpen} setcollectionName={setcollectionName}/>
+              setIsOpen={setIsOpen} setContent={setContent} setcollectionName={setcollectionName}/>
           )}
           <div className='button-collection'>
             { collectionList.length !== 0 ? 
               collectionList.map((collection, index) => {
                 return (
-                  <button className='new-type-button' key={index}>
+                  <button onClick={()=>handleFields(collection.id)} className='new-type-button-collection' key={index}>
                     {collection.name}
                   </button>
                 );
@@ -72,25 +180,30 @@ const ContentBuilder = () => {
               <img src={EditIcon}></img>
             </div>
             <button className='new-field-button' onClick={handleSubmit}>Add another field</button> 
-            {toggle ?<input placeholder='Field Name' value={fieldName} onChange={(e) => setFieldName(e.target.value)}></input>: (<></>)}
+            {toggle ?<div><input placeholder='Field Name' value={fieldName} onChange={(e) => setFieldName(e.target.value)}></input><button onClick={SubmitField} >Add Field</button></div>: (<></>)}
             {fieldList.length === 0 ? (
               <></>
             ) : (
               fieldList.map((field,index) => {
                 return (
-                  <ContentFields
-                    key={index}
-                    fieldName={field}
-                  />
+                  <div className='fields-collection' key={index}>
+                    <div>{field}</div>
+                    <div className='icons'>
+                      <div>
+                        <FontAwesomeIcon onClick={()=>handleEdit(field)} icon={faEdit} />
+                      </div>
+                      <div>
+                        <FontAwesomeIcon onClick={()=>handleDelete(field)} icon={faTrash} />
+                      </div>
+                    </div>
+                  </div>
                 );
               })
             )}
           </>
           )}
-
         </div>
       </div>
-
     </div>
     
   );

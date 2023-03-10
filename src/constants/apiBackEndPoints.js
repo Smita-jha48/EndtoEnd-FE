@@ -5,12 +5,34 @@ export const GET_COLLECTION = {
   method: 'GET',
 };
 
-export const LOGIN_USER =  {
-  url: 'api/auth/login',
+export const GET_ALL_CONTENT = {
+  url: 'api/content/allcontent',
+  method: 'GET',
+
+};
+
+export const CREATE_CONTENT =  {
+  url: 'api/content/save',
   method: 'POST',
 };
 
-export const UPDATE_EVENT_DATA = (songId) => ({
-  url: `api/events/${songId}`,
-  method: 'patch',
-});
+export const GET_ENTRY_DATA = {
+  url: 'api/entry/entries',
+  method: 'POST',
+};
+
+export const ADD_FIELD = {
+  url: 'api/content/addField',
+  method: 'POST',
+};
+
+export const DELETE_FIELD = {
+  url: 'api/content/deletefield',
+  method: 'POST',
+};
+
+export const EDIT_FIELD = {
+  url: 'api/content/editfield',
+  method:'POST',
+
+};

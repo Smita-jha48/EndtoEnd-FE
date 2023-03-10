@@ -42,7 +42,7 @@ const CollectionType = () => {
           collectionList.map((collection, index) => {
             return (
               <ul className='collection-name' key={index}>
-                <li>{collection.name}</li>
+                <li onClick={()=>navigate(`/contententry/${collection.id}/${collection.name}`)}>{collection.name}</li>
               </ul>
             );
           }) : <></>

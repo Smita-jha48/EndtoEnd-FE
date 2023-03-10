@@ -1,17 +1,43 @@
 import React,{useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import  makeRequestbackend  from '../../utils/makeRequestbackend';
+import { CREATE_CONTENT} from '../../constants/apiBackEndPoints';
 import './PopUpCard.css';
 
-const PopUpCard = ({ setIsOpen, setcollectionName}) => {
+const PopUpCard = ({ setIsOpen, setContent, setcollectionName}) => {
+  const navigate = useNavigate();
   const [CollectionName, setCollectionName] = useState('');
   const handleCancel = () => {
     setcollectionName('');
     setIsOpen(false);
   };
-  const handleSubmit = () => {
-    setcollectionName(CollectionName);
-    setIsOpen(false);
+  const handleSubmit =  async() => {
+    try {
+      const response = await makeRequestbackend(
+        CREATE_CONTENT,
+        {
+          data: {
+            name: CollectionName,
+          },
+        },
+        navigate
+      );
+      setContent(response.data);
+      setcollectionName(CollectionName);
+      setIsOpen(false);
+      
+    } catch (e) {
+      const errorStatus = e.response?.status;
+      if (errorStatus) {
+        navigate(`error/${errorStatus}`);
+      } else {
+        navigate('error');
+      }
+    }
   };
+  
   const handleChange = (event) => {
+    setContent({});
     setCollectionName( event.target.value );
   };
 
